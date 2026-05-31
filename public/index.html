@@ -3,695 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Photo Edit Advisor</title>
+<title>Ash Juric — Photography Tools</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #111;
+    --surface: #181818;
+    --surface2: #1f1f1f;
+    --border: #272727;
+    --accent: #c8a96e;
+    --text: #d8d8d8;
+    --text-dim: #666;
+    --heading: #f0f0f0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #111;
-    color: #e0e0e0;
-    height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
   }
 
   header {
-    padding: 14px 24px;
-    background: #1a1a1a;
-    border-bottom: 1px solid #2a2a2a;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 1rem;
+  }
+
+  .logo {
+    width: 40px; height: 40px;
+    background: var(--accent);
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
     flex-shrink: 0;
   }
 
-  header h1 { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
-  header .subtitle { font-size: 12px; color: #555; flex: 1; }
+  .site-name { font-size: 1.3rem; font-weight: 700; color: var(--heading); letter-spacing: -0.01em; }
+  .site-tagline { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.1rem; }
 
-  .history-btn {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 6px 12px;
-    background: #222;
-    border: 1px solid #2e2e2e;
-    border-radius: 6px;
-    color: #888;
-    font-size: 12px;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-  }
-  .history-btn:hover { background: #2a2a2a; color: #bbb; }
-
-  .main { display: flex; flex: 1; overflow: hidden; }
-
-  /* ── Photo Panel ── */
-  .photo-panel {
+  main {
     flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #0d0d0d;
-    position: relative;
-    overflow: hidden;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    width: 100%;
   }
-
-  .dropzone {
-    width: 100%; height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    position: relative;
-  }
-  .dropzone.dragover { background: rgba(255,255,255,0.03); }
-
-  .drop-prompt {
-    display: flex; flex-direction: column; align-items: center; gap: 12px;
-    color: #444; pointer-events: none; transition: color 0.2s;
-  }
-  .dropzone.dragover .drop-prompt { color: #666; }
-  .drop-prompt svg { opacity: 0.4; }
-  .drop-prompt p { font-size: 15px; }
-  .drop-prompt span { font-size: 12px; color: #333; }
-
-  .photo-container { position: relative; display: none; max-width: 100%; max-height: 100%; }
-  .photo-container img {
-    display: block;
-    max-width: 100%;
-    max-height: calc(100vh - 52px);
-    object-fit: contain;
-    user-select: none;
-  }
-  .overlay-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
-
-  /* ── Edit Panel ── */
-  .edit-panel {
-    width: 340px; flex-shrink: 0;
-    background: #161616;
-    border-left: 1px solid #222;
-    display: flex; flex-direction: column;
-    overflow: hidden;
-  }
-
-  .edit-panel-header {
-    padding: 16px 18px 12px;
-    border-bottom: 1px solid #222;
-    flex-shrink: 0;
-  }
-  .edit-panel-header h2 {
-    font-size: 13px; font-weight: 600;
-    color: #888; text-transform: uppercase; letter-spacing: 0.8px;
-  }
-
-  .edit-list { flex: 1; overflow-y: auto; padding: 12px 0; }
-  .edit-list::-webkit-scrollbar { width: 4px; }
-  .edit-list::-webkit-scrollbar-track { background: transparent; }
-  .edit-list::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
-
-  .state-message {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    height: 100%; gap: 10px; color: #444; font-size: 13px; padding: 24px; text-align: center;
-  }
-
-  .spinner {
-    width: 28px; height: 28px;
-    border: 2px solid #2a2a2a; border-top-color: #888;
-    border-radius: 50%; animation: spin 0.8s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .edit-section { margin-bottom: 4px; }
 
   .section-label {
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; padding: 10px 18px 6px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .section-label.critical { color: #f87171; }
-  .section-label.helpful  { color: #fbbf24; }
-  .section-label.optional { color: #60a5fa; }
-
-  .section-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .critical .section-dot { background: #f87171; }
-  .helpful  .section-dot { background: #fbbf24; }
-  .optional .section-dot { background: #60a5fa; }
-
-  .edit-item {
-    padding: 10px 18px; cursor: pointer;
-    border-left: 2px solid transparent;
-    transition: background 0.15s, border-color 0.15s;
-  }
-  .edit-item:hover, .edit-item.active { background: rgba(255,255,255,0.04); }
-  .edit-item.active.priority-critical { border-left-color: #f87171; }
-  .edit-item.active.priority-helpful  { border-left-color: #fbbf24; }
-  .edit-item.active.priority-optional { border-left-color: #60a5fa; }
-
-  .edit-item-title {
-    font-size: 13px; font-weight: 500; color: #ddd;
-    margin-bottom: 3px; display: flex; align-items: center; gap: 7px;
-  }
-  .region-badge {
-    font-size: 9px; padding: 1px 5px; border-radius: 3px;
-    font-weight: 600; letter-spacing: 0.5px;
-  }
-  .priority-critical .region-badge { background: rgba(248,113,113,0.15); color: #f87171; }
-  .priority-helpful  .region-badge { background: rgba(251,191,36,0.15);  color: #fbbf24; }
-  .priority-optional .region-badge { background: rgba(96,165,250,0.15);  color: #60a5fa; }
-
-  .edit-item-desc { font-size: 12px; color: #666; line-height: 1.5; }
-
-  /* ── Edit Panel Footer ── */
-  .edit-panel-footer {
-    padding: 12px 18px;
-    border-top: 1px solid #1e1e1e;
-    display: none;
-    flex-direction: column;
-    gap: 8px;
-    flex-shrink: 0;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
   }
 
-  .save-btn {
-    padding: 9px 14px;
-    background: #1e2d1e;
-    border: 1px solid #2a3d2a;
-    border-radius: 6px;
-    color: #6ab86a;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-    text-align: center;
-  }
-  .save-btn:hover:not(:disabled) { background: #243124; }
-  .save-btn:disabled { opacity: 0.6; cursor: default; }
-  .save-btn.saved { color: #4ade80; border-color: #2d4a2d; }
-
-  .reset-btn {
-    padding: 8px 14px;
-    background: #1f1f1f; border: 1px solid #2e2e2e;
-    border-radius: 6px; color: #666;
-    font-size: 12px; cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-    text-align: center;
-  }
-  .reset-btn:hover { background: #252525; color: #999; }
-
-  .error-msg {
-    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2);
-    border-radius: 6px; padding: 10px 14px; margin: 12px;
-    font-size: 12px; color: #f87171; line-height: 1.5;
-  }
-
-  /* ── History Overlay ── */
-  .history-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 100;
-    flex-direction: column;
-    backdrop-filter: blur(4px);
-  }
-
-  .history-header {
-    padding: 20px 28px 16px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid #222;
-    background: #161616;
-  }
-  .history-header h2 { font-size: 17px; font-weight: 600; color: #fff; }
-
-  .history-close {
-    width: 32px; height: 32px;
-    display: flex; align-items: center; justify-content: center;
-    background: #222; border: 1px solid #2e2e2e;
-    border-radius: 6px; color: #888; cursor: pointer;
-    font-size: 18px; line-height: 1;
-    transition: background 0.15s, color 0.15s;
-  }
-  .history-close:hover { background: #2a2a2a; color: #ddd; }
-
-  .history-body {
-    flex: 1; overflow-y: auto; padding: 24px 28px;
-  }
-  .history-body::-webkit-scrollbar { width: 6px; }
-  .history-body::-webkit-scrollbar-track { background: transparent; }
-  .history-body::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
-
-  .history-grid {
+  .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
   }
 
-  .history-card {
-    background: #1a1a1a; border: 1px solid #222;
-    border-radius: 8px; overflow: hidden;
-    cursor: pointer; transition: border-color 0.15s, transform 0.15s;
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: border-color 0.2s, background 0.2s;
   }
-  .history-card:hover { border-color: #3a3a3a; transform: translateY(-2px); }
+  .tool-card:hover { border-color: var(--accent); background: var(--surface2); }
 
-  .history-thumb {
-    width: 100%; aspect-ratio: 4/3;
-    background-size: cover; background-position: center;
-    background-color: #0d0d0d;
+  .tool-icon { font-size: 1.75rem; margin-bottom: 0.25rem; }
+  .tool-name { font-size: 1rem; font-weight: 700; color: var(--heading); }
+  .tool-desc { font-size: 0.83rem; color: var(--text-dim); line-height: 1.6; }
+  .tool-arrow { margin-top: auto; padding-top: 1rem; font-size: 0.78rem; color: var(--accent); }
+
+  footer {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
   }
 
-  .history-info { padding: 10px 12px; }
-
-  .history-date { font-size: 12px; color: #888; margin-bottom: 6px; }
-
-  .history-counts { display: flex; gap: 6px; flex-wrap: wrap; }
-
-  .hc { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 3px; }
-  .hc-critical { background: rgba(248,113,113,0.15); color: #f87171; }
-  .hc-helpful  { background: rgba(251,191,36,0.15);  color: #fbbf24; }
-  .hc-optional { background: rgba(96,165,250,0.15);  color: #60a5fa; }
-
-  .history-loading {
-    display: flex; justify-content: center; padding: 60px;
-  }
-  .history-empty {
-    text-align: center; padding: 60px; color: #444; font-size: 14px;
+  @media (max-width: 600px) {
+    main { padding: 2rem 1rem; }
+    .tools-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Photo Edit Advisor</h1>
-  <span class="subtitle">Drop a photo to get AI editing recommendations</span>
-  <button class="history-btn" id="historyBtn">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="10"/>
-      <polyline points="12,6 12,12 16,14"/>
-    </svg>
-    History
-  </button>
+  <div class="logo">📷</div>
+  <div>
+    <div class="site-name">Ash Juric Photography</div>
+    <div class="site-tagline">Personal photography tools</div>
+  </div>
 </header>
 
-<div class="main">
-  <div class="photo-panel">
-    <div class="dropzone" id="dropzone">
-      <div class="drop-prompt" id="dropPrompt">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <circle cx="8.5" cy="8.5" r="1.5"/>
-          <polyline points="21,15 16,10 5,21"/>
-        </svg>
-        <p>Drop a photo here</p>
-        <span>or click to browse</span>
-      </div>
-      <div class="photo-container" id="photoContainer">
-        <img id="photoImg" src="" alt="Your photo">
-        <canvas class="overlay-canvas" id="overlayCanvas"></canvas>
-      </div>
-    </div>
+<main>
+  <p class="section-label">Tools</p>
+  <div class="tools-grid">
+
+    <a class="tool-card" href="photo-editing.html">
+      <div class="tool-icon">🎨</div>
+      <div class="tool-name">Edit Advisor</div>
+      <div class="tool-desc">Drop a photo and get AI-powered editing recommendations with prioritised areas highlighted directly on the image.</div>
+      <div class="tool-arrow">Open tool →</div>
+    </a>
+
+    <a class="tool-card" href="photo-workflow.html">
+      <div class="tool-icon">⚡</div>
+      <div class="tool-name">Photo Workflow</div>
+      <div class="tool-desc">Step-by-step guide through your personal import, cull, edit, and export process — from card to delivery.</div>
+      <div class="tool-arrow">Open tool →</div>
+    </a>
+
   </div>
+</main>
 
-  <div class="edit-panel">
-    <div class="edit-panel-header">
-      <h2>Editing Recommendations</h2>
-    </div>
+<footer>Ash Juric Photography</footer>
 
-    <div class="edit-list" id="editList">
-      <div class="state-message">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="opacity:0.3">
-          <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
-        </svg>
-        <span>Drop a photo to see edit recommendations</span>
-      </div>
-    </div>
-
-    <div class="edit-panel-footer" id="editFooter">
-      <button class="save-btn" id="saveBtn">Save Analysis</button>
-      <button class="reset-btn" id="resetBtn">+ Analyze another photo</button>
-    </div>
-  </div>
-</div>
-
-<!-- History Overlay -->
-<div class="history-overlay" id="historyOverlay">
-  <div class="history-header">
-    <h2>Saved Analyses</h2>
-    <button class="history-close" id="historyClose">×</button>
-  </div>
-  <div class="history-body">
-    <div class="history-grid" id="historyGrid"></div>
-  </div>
-</div>
-
-<input type="file" id="fileInput" accept="image/*" style="display:none">
-
-<script>
-const PRIORITY = {
-  critical: { label: 'Must Do',      color: 'rgba(248,113,113,0.35)', border: 'rgba(248,113,113,0.8)' },
-  helpful:  { label: 'Would Help',   color: 'rgba(251,191, 36,0.25)', border: 'rgba(251,191, 36,0.7)' },
-  optional: { label: 'Nice to Have', color: 'rgba( 96,165,250,0.2)',  border: 'rgba( 96,165,250,0.6)' },
-};
-
-let edits         = [];
-let activeEditId  = null;
-let currentImage  = null; // base64
-let currentType   = null; // media type
-let isSaved       = false;
-let historyData   = [];
-
-const dropzone       = document.getElementById('dropzone');
-const dropPrompt     = document.getElementById('dropPrompt');
-const photoContainer = document.getElementById('photoContainer');
-const photoImg       = document.getElementById('photoImg');
-const overlayCanvas  = document.getElementById('overlayCanvas');
-const editList       = document.getElementById('editList');
-const editFooter     = document.getElementById('editFooter');
-const saveBtn        = document.getElementById('saveBtn');
-const resetBtn       = document.getElementById('resetBtn');
-const fileInput      = document.getElementById('fileInput');
-const historyBtn     = document.getElementById('historyBtn');
-const historyOverlay = document.getElementById('historyOverlay');
-const historyClose   = document.getElementById('historyClose');
-const historyGrid    = document.getElementById('historyGrid');
-const ctx            = overlayCanvas.getContext('2d');
-
-// ── Drag / Drop ──────────────────────────────────────────
-dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
-dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-dropzone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropzone.classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file?.type.startsWith('image/')) handleFile(file);
-});
-dropzone.addEventListener('click', e => {
-  if (e.target === dropzone || e.target === dropPrompt || dropPrompt.contains(e.target)) fileInput.click();
-});
-fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
-
-// ── History ──────────────────────────────────────────────
-historyBtn.addEventListener('click', openHistory);
-historyClose.addEventListener('click', () => { historyOverlay.style.display = 'none'; });
-historyOverlay.addEventListener('click', e => {
-  if (e.target === historyOverlay) historyOverlay.style.display = 'none';
-});
-historyGrid.addEventListener('click', e => {
-  const card = e.target.closest('.history-card');
-  if (!card) return;
-  const analysis = historyData.find(a => a.id === card.dataset.id);
-  if (analysis) loadSavedAnalysis(analysis);
-});
-
-// ── Save ─────────────────────────────────────────────────
-saveBtn.addEventListener('click', saveAnalysis);
-resetBtn.addEventListener('click', reset);
-
-// ── Window resize ────────────────────────────────────────
-window.addEventListener('resize', () => { if (edits.length) syncCanvas(); });
-
-// ── Main flow ─────────────────────────────────────────────
-function handleFile(file) {
-  const reader = new FileReader();
-  reader.onload = async e => {
-    const dataUrl = e.target.result;
-    currentImage = dataUrl.split(',')[1];
-    currentType  = dataUrl.split(';')[0].split(':')[1];
-    isSaved = false;
-    edits = [];
-    showPhoto(dataUrl);
-    await analyzePhoto();
-  };
-  reader.readAsDataURL(file);
-}
-
-function showPhoto(src) {
-  dropPrompt.style.display = 'none';
-  photoContainer.style.display = 'block';
-  photoImg.src = src;
-  photoImg.onload = () => { syncCanvas(); if (edits.length) drawOverlay(null); };
-  setLoadingState();
-}
-
-function syncCanvas() {
-  overlayCanvas.width  = photoImg.offsetWidth;
-  overlayCanvas.height = photoImg.offsetHeight;
-  if (edits.length) drawOverlay(activeEditId);
-}
-
-async function analyzePhoto() {
-  try {
-    const res = await fetch('/api/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: currentImage, mediaType: currentType }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || `Error ${res.status}`);
-    }
-
-    const data = await res.json();
-    edits = data.edits || [];
-    renderEdits();
-    syncCanvas();
-    showFooter();
-
-  } catch (err) {
-    showError(err.message);
-  }
-}
-
-async function saveAnalysis() {
-  if (isSaved || !currentImage || !edits.length) return;
-
-  saveBtn.textContent = 'Saving…';
-  saveBtn.disabled = true;
-
-  try {
-    const res = await fetch('/api/save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image: currentImage, mediaType: currentType, edits }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Save failed');
-    }
-
-    isSaved = true;
-    saveBtn.textContent = '✓ Saved';
-    saveBtn.classList.add('saved');
-
-  } catch (err) {
-    saveBtn.textContent = `Save failed: ${err.message}`;
-    saveBtn.disabled = false;
-  }
-}
-
-function reset() {
-  edits = []; activeEditId = null;
-  currentImage = null; currentType = null; isSaved = false;
-  photoContainer.style.display = 'none';
-  dropPrompt.style.display = '';
-  photoImg.src = '';
-  ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-  editFooter.style.display = 'none';
-  fileInput.value = '';
-  saveBtn.textContent = 'Save Analysis';
-  saveBtn.disabled = false;
-  saveBtn.classList.remove('saved');
-  editList.innerHTML = `
-    <div class="state-message">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="opacity:0.3">
-        <path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
-      </svg>
-      <span>Drop a photo to see edit recommendations</span>
-    </div>`;
-}
-
-// ── History ───────────────────────────────────────────────
-async function openHistory() {
-  historyOverlay.style.display = 'flex';
-  historyGrid.innerHTML = '<div class="history-loading"><div class="spinner"></div></div>';
-
-  try {
-    const res = await fetch('/api/history');
-    if (!res.ok) throw new Error(`Error ${res.status}`);
-    historyData = await res.json();
-    renderHistory();
-  } catch (err) {
-    historyGrid.innerHTML = `<div class="error-msg">${escHtml(err.message)}</div>`;
-  }
-}
-
-function renderHistory() {
-  if (!historyData.length) {
-    historyGrid.innerHTML = '<div class="history-empty">No saved analyses yet. Analyze a photo and click Save.</div>';
-    return;
-  }
-
-  historyGrid.innerHTML = historyData.map(a => {
-    const date = new Date(a.timestamp).toLocaleString('en-US', {
-      month: 'short', day: 'numeric', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
-    });
-    const counts = {
-      critical: a.edits.filter(e => e.priority === 'critical').length,
-      helpful:  a.edits.filter(e => e.priority === 'helpful').length,
-      optional: a.edits.filter(e => e.priority === 'optional').length,
-    };
-    const badges = [
-      counts.critical ? `<span class="hc hc-critical">${counts.critical} critical</span>` : '',
-      counts.helpful  ? `<span class="hc hc-helpful">${counts.helpful} helpful</span>`   : '',
-      counts.optional ? `<span class="hc hc-optional">${counts.optional} optional</span>` : '',
-    ].join('');
-
-    return `
-      <div class="history-card" data-id="${escHtml(a.id)}">
-        <div class="history-thumb" style="background-image:url('${escHtml(a.photoUrl)}')"></div>
-        <div class="history-info">
-          <div class="history-date">${date}</div>
-          <div class="history-counts">${badges}</div>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function loadSavedAnalysis(analysis) {
-  historyOverlay.style.display = 'none';
-  edits = analysis.edits;
-  currentImage = null;
-  currentType  = null;
-  isSaved = true;
-  showPhoto(analysis.photoUrl);
-  renderEdits();
-  showFooter(true);
-}
-
-// ── Render edit list ──────────────────────────────────────
-function renderEdits() {
-  editList.innerHTML = '';
-  const sections = ['critical', 'helpful', 'optional'];
-  let any = false;
-
-  sections.forEach(priority => {
-    const items = edits.filter(e => e.priority === priority);
-    if (!items.length) return;
-    any = true;
-
-    const section = document.createElement('div');
-    section.className = 'edit-section';
-
-    const label = document.createElement('div');
-    label.className = `section-label ${priority}`;
-    label.innerHTML = `<span class="section-dot"></span>${PRIORITY[priority].label}`;
-    section.appendChild(label);
-
-    items.forEach(edit => {
-      const item = document.createElement('div');
-      item.className = `edit-item priority-${priority}`;
-      item.dataset.id = edit.id;
-      item.innerHTML = `
-        <div class="edit-item-title">
-          ${escHtml(edit.title)}
-          ${edit.region ? '<span class="region-badge">area</span>' : ''}
-        </div>
-        <div class="edit-item-desc">${escHtml(edit.description)}</div>`;
-
-      item.addEventListener('mouseenter', () => { setActive(edit.id); drawOverlay(edit.id); });
-      item.addEventListener('mouseleave', () => { setActive(null); drawOverlay(null); });
-      section.appendChild(item);
-    });
-
-    editList.appendChild(section);
-  });
-
-  if (!any) showError('No edits returned — try another photo.');
-}
-
-function setActive(id) {
-  activeEditId = id;
-  document.querySelectorAll('.edit-item').forEach(el => el.classList.toggle('active', el.dataset.id == id));
-}
-
-// ── Canvas overlay ────────────────────────────────────────
-function drawOverlay(highlightId) {
-  const W = overlayCanvas.width;
-  const H = overlayCanvas.height;
-  ctx.clearRect(0, 0, W, H);
-
-  edits.forEach(edit => {
-    if (!edit.region) return;
-    const cfg = PRIORITY[edit.priority] || PRIORITY.optional;
-    const isHl = edit.id === highlightId;
-
-    const x = (edit.region.x / 100) * W;
-    const y = (edit.region.y / 100) * H;
-    const w = (edit.region.w / 100) * W;
-    const h = (edit.region.h / 100) * H;
-
-    if (isHl) {
-      ctx.save();
-      ctx.fillStyle = 'rgba(0,0,0,0.45)';
-      ctx.fillRect(0, 0, W, H);
-      ctx.clearRect(x, y, w, h);
-      ctx.restore();
-
-      ctx.fillStyle = cfg.color.replace(/[\d.]+\)$/, '0.4)');
-      ctx.fillRect(x, y, w, h);
-
-      ctx.strokeStyle = cfg.border;
-      ctx.lineWidth = 2;
-      ctx.strokeRect(x, y, w, h);
-
-      ctx.font = 'bold 12px -apple-system, sans-serif';
-      const pad = 6;
-      const tw = ctx.measureText(edit.title).width;
-      const bx = Math.min(x, W - tw - pad * 2 - 2);
-      const by = y > 24 ? y - 24 : y + h + 4;
-      ctx.fillStyle = cfg.border;
-      ctx.fillRect(bx, by, tw + pad * 2, 20);
-      ctx.fillStyle = '#111';
-      ctx.fillText(edit.title, bx + pad, by + 14);
-
-    } else if (highlightId === null) {
-      ctx.fillStyle = cfg.color;
-      ctx.fillRect(x, y, w, h);
-      ctx.strokeStyle = cfg.border.replace(/[\d.]+\)$/, '0.35)');
-      ctx.lineWidth = 1.5;
-      ctx.strokeRect(x, y, w, h);
-    }
-  });
-}
-
-// ── Helpers ───────────────────────────────────────────────
-function showFooter(saved = false) {
-  editFooter.style.display = 'flex';
-  if (saved) {
-    saveBtn.textContent = '✓ Saved';
-    saveBtn.classList.add('saved');
-    saveBtn.disabled = true;
-  } else {
-    saveBtn.textContent = 'Save Analysis';
-    saveBtn.classList.remove('saved');
-    saveBtn.disabled = false;
-  }
-}
-
-function setLoadingState() {
-  editList.innerHTML = `<div class="state-message"><div class="spinner"></div><span>Analyzing your photo…</span></div>`;
-  editFooter.style.display = 'none';
-}
-
-function showError(msg) {
-  editList.innerHTML = `<div class="error-msg">${escHtml(msg)}</div>`;
-}
-
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-</script>
 </body>
 </html>
