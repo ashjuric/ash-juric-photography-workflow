@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lightroom Cheat Sheet — Ash Juric Photography</title>
+<style>
+  :root {
+    --bg: #111;
+    --surface: #181818;
+    --surface2: #1f1f1f;
+    --surface3: #252525;
+    --border: #272727;
+    --border2: #303030;
+    --accent: #c8a96e;
+    --text: #d0d0d0;
+    --text-dim: #5a5a5a;
+    --text-mid: #888;
+    --heading: #f0f0f0;
+    --sidebar-w: 220px;
+
+    --tone-color:    #e07b4a;
+    --detail-color:  #6a9edb;
+    --color-color:   #8dba6a;
+    --noise-color:   #a07ee0;
+    --mask-color:    #e0b44a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Top nav ── */
+  .topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    flex-shrink: 0;
+  }
+  .back-link {
+    font-size: 12px; color: #555; text-decoration: none;
+    display: flex; align-items: center; gap: 4px; white-space: nowrap;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--accent); }
+  .topbar-divider { color: #333; }
+  .topbar h1 { font-size: 15px; font-weight: 600; color: var(--heading); flex: 1; }
+  .topbar-subtitle { font-size: 11px; color: var(--text-dim); }
+
+  /* ── Layout ── */
+  .layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    height: calc(100vh - 45px);
+  }
+
+  /* ── Sidebar ── */
+  aside {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 20px 0;
+  }
+  aside::-webkit-scrollbar { width: 3px; }
+  aside::-webkit-scrollbar-thumb { background: #2a2a2a; }
+
+  .nav-section { margin-bottom: 20px; }
+
+  .nav-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--text-dim);
+    padding: 0 16px 6px;
+  }
+
+  .nav-link {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 16px;
+    font-size: 12px; color: #777;
+    text-decoration: none;
+    transition: background 0.12s, color 0.12s;
+    border-left: 2px solid transparent;
+  }
+  .nav-link:hover { background: rgba(255,255,255,0.03); color: #bbb; }
+  .nav-link.active { color: var(--accent); border-left-color: var(--accent); background: rgba(200,169,110,0.06); }
+
+  .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* ── Main content ── */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 40px 60px;
+  }
+  main::-webkit-scrollbar { width: 5px; }
+  main::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 3px; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 56px; scroll-margin-top: 24px; }
+
+  .section-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px; padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-badge {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .section-header h2 { font-size: 18px; font-weight: 700; color: var(--heading); }
+  .section-desc { font-size: 12px; color: var(--text-dim); margin-top: 1px; }
+
+  /* ── VS comparison ── */
+  .vs-block { margin-bottom: 24px; }
+
+  .vs-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--text-dim);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .vs-label::before, .vs-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .vs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .vs-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  .vs-grid.four  { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .tool-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .tool-name {
+    font-size: 14px; font-weight: 700;
+    color: var(--heading);
+    margin-bottom: 4px;
+  }
+  .tool-panel { font-size: 10px; color: var(--text-dim); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .tool-desc { font-size: 12px; color: var(--text-mid); line-height: 1.6; margin-bottom: 12px; }
+
+  .scale-bar {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 10px;
+  }
+  .scale-label { font-size: 10px; color: var(--text-dim); width: 34px; flex-shrink: 0; }
+  .scale-track {
+    flex: 1; height: 4px; background: var(--border2); border-radius: 2px; position: relative;
+  }
+  .scale-fill { height: 100%; border-radius: 2px; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+  .tag {
+    font-size: 10px; padding: 2px 7px; border-radius: 4px;
+    font-weight: 500;
+  }
+  .tag.use   { background: rgba(100,200,100,0.1); color: #7dba7d; }
+  .tag.avoid { background: rgba(220,100,100,0.1); color: #cc7070; }
+
+  .tool-tip {
+    font-size: 11px; color: #4a7ab8;
+    background: rgba(74,122,184,0.08);
+    border-left: 2px solid rgba(74,122,184,0.4);
+    padding: 6px 10px;
+    border-radius: 0 5px 5px 0;
+    line-height: 1.5;
+  }
+
+  /* ── Single tool row (no vs) ── */
+  .tool-row {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    display: grid;
+    grid-template-columns: 140px 1fr auto;
+    gap: 16px;
+    align-items: start;
+  }
+  .tool-row-name { font-size: 13px; font-weight: 600; color: var(--heading); }
+  .tool-row-panel { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+  .tool-row-desc { font-size: 12px; color: var(--text-mid); line-height: 1.6; }
+  .tool-row-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  /* ── Quick-ref table ── */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-bottom: 24px;
+  }
+  .ref-table th {
+    text-align: left;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+    color: var(--text-dim);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border2);
+  }
+  .ref-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-mid);
+    vertical-align: top;
+  }
+  .ref-table td:first-child { color: var(--heading); font-weight: 500; white-space: nowrap; }
+  .ref-table tr:last-child td { border-bottom: none; }
+  .ref-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* ── Callout ── */
+  .callout {
+    background: rgba(200,169,110,0.07);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #b89a5e;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .callout strong { color: var(--accent); }
+
+  /* ── Subsection ── */
+  .subsection { margin-bottom: 24px; }
+  .subsection-title {
+    font-size: 12px; font-weight: 700; color: #888;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .subsection-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  @media (max-width: 900px) {
+    .layout { flex-direction: column; height: auto; overflow: visible; }
+    aside { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding: 12px 0; display: flex; overflow-x: auto; }
+    .nav-section { margin-bottom: 0; display: flex; align-items: center; }
+    .nav-label { display: none; }
+    .nav-link { white-space: nowrap; border-left: none; border-bottom: 2px solid transparent; }
+    .nav-link.active { border-bottom-color: var(--accent); border-left-color: transparent; }
+    main { padding: 24px 20px 40px; }
+    .vs-grid.four { grid-template-columns: 1fr 1fr; }
+    .tool-row { grid-template-columns: 1fr; gap: 6px; }
+  }
+  @media (max-width: 600px) {
+    .vs-grid, .vs-grid.three { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-link" href="index.html">← Tools</a>
+  <span class="topbar-divider">/</span>
+  <h1>Lightroom Cheat Sheet</h1>
+  <span class="topbar-subtitle">Full reference</span>
+</div>
+
+<div class="layout">
+
+  <!-- Sidebar nav -->
+  <aside id="sidebar">
+    <div class="nav-section">
+      <div class="nav-label">Sections</div>
+      <a class="nav-link active" href="#detail" data-section="detail">
+        <span class="nav-dot" style="background:#6a9edb"></span>Detail &amp; Texture
+      </a>
+      <a class="nav-link" href="#tone" data-section="tone">
+        <span class="nav-dot" style="background:#e07b4a"></span>Tone
+      </a>
+      <a class="nav-link" href="#color" data-section="color">
+        <span class="nav-dot" style="background:#8dba6a"></span>Color
+      </a>
+      <a class="nav-link" href="#noise" data-section="noise">
+        <span class="nav-dot" style="background:#a07ee0"></span>Noise Reduction
+      </a>
+      <a class="nav-link" href="#masking" data-section="masking">
+        <span class="nav-dot" style="background:#e0b44a"></span>Masking &amp; Local
+      </a>
+      <a class="nav-link" href="#sharpening" data-section="sharpening">
+        <span class="nav-dot" style="background:#5ab8b0"></span>Sharpening Sliders
+      </a>
+      <a class="nav-link" href="#order" data-section="order">
+        <span class="nav-dot" style="background:#888"></span>Edit Order
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main id="main">
+
+    <!-- ═══════════════════════════════════════ DETAIL & TEXTURE -->
+    <section class="section" id="detail">
+      <div class="section-header">
+        <span class="section-badge" style="background:#6a9edb"></span>
+        <div>
+          <h2>Detail &amp; Texture</h2>
+          <div class="section-desc">The four tools that affect perceived sharpness and crispness</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Making a subject crisper:</strong> Texture → Clarity → Sharpening work at different scales. Start with Texture for fine surface detail, add Clarity if you want more punch and 3D separation, then refine with Sharpening in the Detail panel. Dehaze is for large-scale atmospheric contrast only.
+      </div>
+
+      <div class="vs-block">
+        <div class="vs-label">The four crispness tools compared</div>
+        <div class="vs-grid four">
+
+          <div class="tool-card">
+            <div class="tool-name">Texture</div>
+            <div class="tool-panel">Presence panel</div>
+            <div class="tool-desc">Enhances micro surface detail — the very fine, high-frequency structure in an image. Adds crispness without affecting smooth areas or overall contrast.</div>
+            <div class="scale-bar">
+              <span class="scale-label">Scale</span>
+              <div class="scale-track"><div class="scale-fill" style="width:25%;background:#6a9edb"></div></div>
+              <span style="font-size:10px;color:#6a9edb">Fine</span>
+            </div>
+            <div class="tags">
+              <span class="tag use">fur &amp; feathers</span>
+              <span class="tag use">skin pores</span>
+              <span class="tag use">bark &amp; rock</span>
+              <span class="tag use">fabric</span>
+              <span class="tag avoid">smooth bokeh bg</span>
+            </div>
+            <div class="tool-tip">Hold Alt/Option while dragging to see a grayscale preview of what's being affected.</div>
+          </div>
+
+          <div class="tool-card">
+            <div class="tool-name">Clarity</div>
+            <div class="tool-panel">Presence panel</div>
+            <div class="tool-desc">Adds midtone contrast at a medium scale — makes edges pop and gives a more "3D" or punchy look. Affects a wider radius than Texture. Negative clarity gives a soft, dreamy glow effect.</div>
+            <div class="scale-bar">
+              <span class="scale-label">Scale</span>
+              <div class="scale-track"><div class="scale-fill" style="width:55%;background:#6a9edb"></div></div>
+              <span style="font-size:10px;color:#6a9edb">Medium</span>
+            </div>
+            <div class="tags">
+              <span class="tag use">subject separation</span>
+              <span class="tag use">drama / grit</span>
+              <span class="tag use">landscapes</span>
+              <span class="tag avoid">smooth skin portraits</span>
+              <span class="tag avoid">anything overdone</span>
+            </div>
+            <div class="tool-tip">Texture handles skin better than Clarity — prefer Texture if you're trying to crisp up a face without making pores harsh.</div>
+          </div>
+
+          <div class="tool-card">
+            <div class="tool-name">Sharpening</div>
+            <div class="tool-panel">Detail panel</div>
+            <div class="tool-desc">True pixel-level edge sharpening. Works at the smallest scale. Controlled by four sub-sliders (Amount, Radius, Detail, Masking). Affects the whole image unless you use the Masking slider.</div>
+            <div class="scale-bar">
+              <span class="scale-label">Scale</span>
+              <div class="scale-track"><div class="scale-fill" style="width:15%;background:#6a9edb"></div></div>
+              <span style="font-size:10px;color:#6a9edb">Pixel</span>
+            </div>
+            <div class="tags">
+              <span class="tag use">global sharpening</span>
+              <span class="tag use">export prep</span>
+              <span class="tag avoid">high ISO noise (use Masking)</span>
+            </div>
+            <div class="tool-tip">Alt/Option + drag Masking to see the mask. White = sharpened. Raise it until smooth areas turn black so noise doesn't get sharpened.</div>
+          </div>
+
+          <div class="tool-card">
+            <div class="tool-name">Dehaze</div>
+            <div class="tool-panel">Presence panel</div>
+            <div class="tool-desc">Removes atmospheric haze by boosting large-scale contrast and color saturation. Positive = cuts haze. Negative = adds haze / ethereal fog. Works at the largest scale of the four.</div>
+            <div class="scale-bar">
+              <span class="scale-label">Scale</span>
+              <div class="scale-track"><div class="scale-fill" style="width:90%;background:#6a9edb"></div></div>
+              <span style="font-size:10px;color:#6a9edb">Large</span>
+            </div>
+            <div class="tags">
+              <span class="tag use">foggy landscapes</span>
+              <span class="tag use">underwater shots</span>
+              <span class="tag use">dramatic sky (local)</span>
+              <span class="tag avoid">portraits</span>
+              <span class="tag avoid">indoor / studio</span>
+            </div>
+            <div class="tool-tip">Use on a local mask (sky or background only) rather than globally — full-image Dehaze quickly looks harsh.</div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════ TONE -->
+    <section class="section" id="tone">
+      <div class="section-header">
+        <span class="section-badge" style="background:#e07b4a"></span>
+        <div>
+          <h2>Tone</h2>
+          <div class="section-desc">Six sliders that map to different regions of the histogram</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Think of it as the histogram in zones:</strong> Blacks → Shadows → Exposure → Highlights → Whites runs from the darkest pixel to the brightest. Exposure is the anchor for the whole image; Whites/Blacks set the hard endpoints; Highlights/Shadows recover compressed detail.
+      </div>
+
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Slider</th>
+            <th>What zone it affects</th>
+            <th>Best use</th>
+            <th>Tip</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Exposure</td>
+            <td>Entire histogram shifts together</td>
+            <td>Getting the base brightness right first — adjust this before anything else</td>
+            <td>Think of it as the aperture equivalent in post. Everything moves together.</td>
+          </tr>
+          <tr>
+            <td>Contrast</td>
+            <td>Applies an S-curve — darkens darks, brightens brights simultaneously</td>
+            <td>Quick drama boost, but can crush shadows/blow highlights if overdone</td>
+            <td>More control to use the Tone Curve directly instead of this slider.</td>
+          </tr>
+          <tr>
+            <td>Highlights</td>
+            <td>Bright tones — roughly the top 1/3 of the histogram</td>
+            <td>Pulling back sky and bright areas without touching the whole image</td>
+            <td>Highlights has a gentler reach than Whites. Use Highlights first, then Whites to clip.</td>
+          </tr>
+          <tr>
+            <td>Whites</td>
+            <td>The very brightest tones — the white point (clipping)</td>
+            <td>Setting where pure white lands. Positive clips to white; negative pulls back blow-outs</td>
+            <td>Alt/Option + drag to see clipping preview. No colour = clipping to pure white.</td>
+          </tr>
+          <tr>
+            <td>Shadows</td>
+            <td>Dark-to-mid tones — roughly the bottom 1/3 of the histogram</td>
+            <td>Opening up shadow detail, pulling texture out of dark areas</td>
+            <td>Raising Shadows can quickly look flat/grey. Counteract with a slight Blacks reduction.</td>
+          </tr>
+          <tr>
+            <td>Blacks</td>
+            <td>The very darkest tones — the black point</td>
+            <td>Setting how deep the darkest shadow goes. Dropping it adds richness/depth.</td>
+            <td>Classic combo: raise Shadows + lower Blacks to open detail without looking washed out.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="subsection">
+        <div class="subsection-title">Highlights vs Whites — the most confused pair</div>
+        <div class="vs-grid">
+          <div class="tool-card">
+            <div class="tool-name">Highlights</div>
+            <div class="tool-desc">Affects a broad range of bright tones. Pulling it down recovers detail in bright but not blown areas — clouds, bright fabric, a lit face. Gentler and more gradual in its transition.</div>
+            <div class="tags">
+              <span class="tag use">cloud recovery</span>
+              <span class="tag use">bright skin</span>
+              <span class="tag use">window light</span>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-name">Whites</div>
+            <div class="tool-desc">Only affects the absolute brightest pixels — where clipping happens. Use positive to intentionally clip to white (high-key look). Use negative to pull back actual blow-outs in RAW.</div>
+            <div class="tags">
+              <span class="tag use">setting white point</span>
+              <span class="tag use">recovering blown RAW data</span>
+              <span class="tag avoid">lifting midtones (use Exposure)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Shadows vs Blacks — the other confused pair</div>
+        <div class="vs-grid">
+          <div class="tool-card">
+            <div class="tool-name">Shadows</div>
+            <div class="tool-desc">Lifts the dark-mid zone — the murky region above pure black. Great for pulling texture and detail out of dark areas without making blacks look grey.</div>
+            <div class="tags">
+              <span class="tag use">shadow detail recovery</span>
+              <span class="tag use">backlit subjects</span>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-name">Blacks</div>
+            <div class="tool-desc">Sets the black point — where the darkest thing in your image sits. Dropping it deepens the darkest tones and adds richness. Counteracts the flat look of raised Shadows.</div>
+            <div class="tags">
+              <span class="tag use">depth and richness</span>
+              <span class="tag use">after raising Shadows</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════ COLOR -->
+    <section class="section" id="color">
+      <div class="section-header">
+        <span class="section-badge" style="background:#8dba6a"></span>
+        <div>
+          <h2>Color</h2>
+          <div class="section-desc">White balance, saturation, HSL, and tone curve colour</div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Vibrance vs Saturation — always use Vibrance first</div>
+        <div class="vs-grid">
+          <div class="tool-card">
+            <div class="tool-name">Vibrance</div>
+            <div class="tool-panel">Presence panel</div>
+            <div class="tool-desc">Smart saturation — boosts less-saturated colours more aggressively while protecting colours that are already vivid, and specifically protecting skin-tone ranges. Almost always the better choice.</div>
+            <div class="tags">
+              <span class="tag use">portraits</span>
+              <span class="tag use">adding pop without garishness</span>
+              <span class="tag use">any image really</span>
+            </div>
+            <div class="tool-tip">Vibrance of +20 looks natural. Saturation +20 often looks overdone.</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-name">Saturation</div>
+            <div class="tool-panel">Presence panel</div>
+            <div class="tool-desc">Boosts all colours equally and globally. Can quickly push already-vivid colours into oversaturation. Useful for desaturation (pulling colour out) — negative values reduce all colours equally.</div>
+            <div class="tags">
+              <span class="tag use">global desaturation</span>
+              <span class="tag use">black &amp; white conversion (−100)</span>
+              <span class="tag avoid">positive on portraits</span>
+              <span class="tag avoid">already vivid landscapes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">White Balance — set this first, everything else depends on it</div>
+        <table class="ref-table">
+          <thead><tr><th>Slider</th><th>Axis</th><th>What it does</th><th>Common fix</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Temperature</td>
+              <td>Blue ←→ Orange</td>
+              <td>Shifts the overall warmth. Higher = warmer/more orange. Lower = cooler/more blue.</td>
+              <td>Overcast sky makes shots too blue — raise Temperature. Tungsten light too orange — lower it.</td>
+            </tr>
+            <tr>
+              <td>Tint</td>
+              <td>Green ←→ Magenta</td>
+              <td>Corrects green or magenta colour casts. Usually needed after setting Temperature.</td>
+              <td>Fluorescent lights add green — raise Tint toward magenta. Mixed lighting often needs both sliders.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">HSL — per-colour control (Hue, Saturation, Luminance)</div>
+        <table class="ref-table">
+          <thead><tr><th>Channel</th><th>What it controls</th><th>Example use</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Hue</td>
+              <td>Shifts the actual colour — e.g. push Orange more toward Yellow, or Blue toward Cyan</td>
+              <td>Sunset sky looking too red — shift Reds and Oranges toward yellow to get that golden look</td>
+            </tr>
+            <tr>
+              <td>Saturation</td>
+              <td>Intensity of that specific colour only</td>
+              <td>Sky too neon — drop Aqua/Blue saturation. Or boost just the greens in foliage.</td>
+            </tr>
+            <tr>
+              <td>Luminance</td>
+              <td>Brightness of pixels of that colour</td>
+              <td>Make the sky darker without touching anything else — lower Blue luminance. Brightening teeth — raise Yellow luminance.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="tool-tip" style="margin-top:8px">Use the target/bullseye icon to click directly on a colour in your image and drag up/down — faster than guessing which colour range to adjust.</div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Tone Curve vs Basic Panel</div>
+        <div class="vs-grid">
+          <div class="tool-card">
+            <div class="tool-name">Basic Panel Tone</div>
+            <div class="tool-desc">Sliders are intelligent — they protect the rest of the tonal range while adjusting their zone. Fast, non-destructive starting point. Most adjustments can be done entirely here.</div>
+            <div class="tags"><span class="tag use">primary editing</span><span class="tag use">most images</span></div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-name">Tone Curve</div>
+            <div class="tool-desc">Precise control over any tonal zone. Drag a point to affect only that region. Also has per-channel (R/G/B) curves for coloured shadows/highlights. Film looks, faded lifts, split-toning all start here.</div>
+            <div class="tags"><span class="tag use">precise tonal control</span><span class="tag use">film / matte look</span><span class="tag use">split toning</span></div>
+            <div class="tool-tip">Lift the bottom-left point (shadow point) off the floor to create a faded/matte look.</div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════ NOISE -->
+    <section class="section" id="noise">
+      <div class="section-header">
+        <span class="section-badge" style="background:#a07ee0"></span>
+        <div>
+          <h2>Noise Reduction</h2>
+          <div class="section-desc">Luminance vs colour noise — different problems, different fixes</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Rule of thumb:</strong> Always fix Colour noise first (it's free — doesn't cost sharpness). Then deal with Luminance noise, which trades detail for smoothness.
+      </div>
+
+      <div class="vs-grid">
+        <div class="tool-card">
+          <div class="tool-name">Luminance Noise</div>
+          <div class="tool-panel">Detail panel → Noise Reduction</div>
+          <div class="tool-desc">Smooths out the speckly grey grain in shadows at high ISO. Reduces sharpness as you raise it — there's always a trade-off. Use the Detail and Contrast sliders to recover some of what you lose.</div>
+          <div class="tags">
+            <span class="tag use">high ISO grain</span>
+            <span class="tag use">shadow speckle</span>
+          </div>
+          <div class="tool-tip">Detail slider: higher preserves texture but keeps more noise. Contrast slider: higher keeps tonal contrast but can look mottled. Balance against Amount.</div>
+        </div>
+        <div class="tool-card">
+          <div class="tool-name">Colour Noise</div>
+          <div class="tool-panel">Detail panel → Noise Reduction</div>
+          <div class="tool-desc">Removes the coloured blotches — magenta, green, blue speckles — that appear at high ISO, especially in shadows. High values rarely hurt sharpness. Default of 25 is usually enough; go to 50–70 for serious high-ISO work.</div>
+          <div class="tags">
+            <span class="tag use">colour blotching</span>
+            <span class="tag use">high ISO shadows</span>
+          </div>
+          <div class="tool-tip">Detail slider here controls how much edge detail is preserved — raising it keeps colour edges sharper but can leave fringing. Default is fine in most cases.</div>
+        </div>
+      </div>
+
+      <div class="subsection" style="margin-top:20px">
+        <div class="subsection-title">AI Denoise (Lightroom 2023+)</div>
+        <div class="tool-row">
+          <div>
+            <div class="tool-row-name">Denoise (AI)</div>
+            <div class="tool-row-panel">Photo → Enhance → Denoise</div>
+          </div>
+          <div class="tool-row-desc">Machine learning denoising that beats the Detail panel's noise reduction significantly. Creates a new DNG file. Best used when Luminance NR at full strength is still leaving too much noise or costing too much detail. Not a real-time slider — takes seconds to process.</div>
+          <div class="tool-row-tags">
+            <span class="tag use">extreme high ISO</span>
+            <span class="tag use">wildlife / low light</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════ MASKING -->
+    <section class="section" id="masking">
+      <div class="section-header">
+        <span class="section-badge" style="background:#e0b44a"></span>
+        <div>
+          <h2>Masking &amp; Local Adjustments</h2>
+          <div class="section-desc">When global sliders aren't enough — isolate what you're adjusting</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Masks stack:</strong> You can add, subtract, and intersect masks. Start with an AI mask (Subject or Sky), then subtract areas that aren't right. This is faster than painting from scratch.
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">AI Masks — start here</div>
+        <table class="ref-table">
+          <thead><tr><th>Mask type</th><th>What it selects</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td>Subject</td><td>AI-detected main subject(s)</td><td>Brightening or sharpening your subject independently of the background</td></tr>
+            <tr><td>Sky</td><td>AI-detected sky region</td><td>Pulling back sky exposure, adding Dehaze to sky only, colour grading sky</td></tr>
+            <tr><td>Background</td><td>Everything except the subject</td><td>Blurring, desaturating, or darkening backgrounds</td></tr>
+            <tr><td>People</td><td>Sub-masks: face skin, body skin, eyebrows, eyes, lips, teeth, hair</td><td>Portrait retouching — brighten teeth, sharpen eyes, soften skin — each independently</td></tr>
+            <tr><td>Objects</td><td>Click on any object to select it</td><td>Isolating specific elements that aren't caught by Subject</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Range Masks — select by property</div>
+        <div class="vs-grid">
+          <div class="tool-card">
+            <div class="tool-name">Luminance Range</div>
+            <div class="tool-desc">Selects pixels by brightness. Great for targeting just the shadows, just the highlights, or the midtones without affecting anything else.</div>
+            <div class="tags">
+              <span class="tag use">pulling back blown highlights</span>
+              <span class="tag use">lifting shadow detail</span>
+              <span class="tag use">midtone contrast</span>
+            </div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-name">Colour Range</div>
+            <div class="tool-desc">Selects pixels by colour using an eyedropper. Click on a colour in the image to select that range. Useful for adjustments that apply only to a specific colour — sky blues, foliage greens, skin tones.</div>
+            <div class="tags">
+              <span class="tag use">sky colour grading</span>
+              <span class="tag use">selective colour shift</span>
+              <span class="tag use">foliage</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Shape Masks — paint or draw an area</div>
+        <table class="ref-table">
+          <thead><tr><th>Type</th><th>Shape</th><th>Best for</th></tr></thead>
+          <tbody>
+            <tr><td>Brush</td><td>Free-paint any area</td><td>Precise local adjustments — dodging, burning specific spots, fixing an ear or branch</td></tr>
+            <tr><td>Radial Gradient</td><td>Oval with soft feathered edge</td><td>Vignettes, spotlighting a subject, adding or removing light from a circular area</td></tr>
+            <tr><td>Linear Gradient</td><td>Straight graduated fade</td><td>Sky darkening, horizon exposure correction, foreground lightening</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════ SHARPENING SLIDERS -->
+    <section class="section" id="sharpening">
+      <div class="section-header">
+        <span class="section-badge" style="background:#5ab8b0"></span>
+        <div>
+          <h2>Sharpening Sliders</h2>
+          <div class="section-desc">Detail panel — four sliders that work together</div>
+        </div>
+      </div>
+
+      <table class="ref-table">
+        <thead><tr><th>Slider</th><th>What it does</th><th>Starting point</th><th>Alt/Option preview</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Amount</td>
+            <td>How much sharpening is applied overall</td>
+            <td>40–80 for most images. Higher for wildlife/birds, lower for smooth skin.</td>
+            <td>Grayscale view of sharpening applied (white = sharp edges)</td>
+          </tr>
+          <tr>
+            <td>Radius</td>
+            <td>The width of the sharpening halo around edges</td>
+            <td>0.8–1.0 for fine detail (fur, feathers). 1.5–2.0 for broader edges (landscapes, architecture).</td>
+            <td>Grayscale showing radius width</td>
+          </tr>
+          <tr>
+            <td>Detail</td>
+            <td>How much fine texture vs just clean edges gets sharpened</td>
+            <td>Low (25) = edges only. High (75+) = all texture sharpened (also sharpens noise).</td>
+            <td>Areas being detected for sharpening highlighted</td>
+          </tr>
+          <tr>
+            <td>Masking</td>
+            <td>Restricts sharpening to only edge areas — smooth areas (skin, sky, bokeh) are excluded</td>
+            <td>0 = sharpen everything. 50 = only harder edges. 80+ = only the most defined edges. Raise this on noisy images.</td>
+            <td>White = will be sharpened. Black = protected. This is the most useful preview — use it every time.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <strong>Starting recipe for wildlife / birds:</strong> Amount 70 · Radius 0.9 · Detail 40 · Masking 50–70. Then use Alt/Option + Masking to make sure smooth backgrounds are masked out before raising Amount.
+      </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════ EDIT ORDER -->
+    <section class="section" id="order">
+      <div class="section-header">
+        <span class="section-badge" style="background:#888"></span>
+        <div>
+          <h2>Edit Order</h2>
+          <div class="section-desc">Doing things in the wrong order wastes time and creates rework</div>
+        </div>
+      </div>
+
+      <table class="ref-table">
+        <thead><tr><th>#</th><th>Step</th><th>Why here</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>White Balance (Temperature + Tint)</td><td>Everything downstream — colour, saturation, tone — depends on correct WB. Fix it first or you'll chase your tail.</td></tr>
+          <tr><td>2</td><td>Exposure</td><td>Set the overall brightness anchor before making fine adjustments.</td></tr>
+          <tr><td>3</td><td>Highlights + Whites / Shadows + Blacks</td><td>Recover or clip the tonal range now so Contrast and Tone Curve work on a good foundation.</td></tr>
+          <tr><td>4</td><td>Contrast / Tone Curve</td><td>Add contrast after the tonal range is set, not before.</td></tr>
+          <tr><td>5</td><td>Presence (Texture, Clarity, Vibrance)</td><td>These affect how the image reads visually — don't add them until tone is right or you'll over-correct.</td></tr>
+          <tr><td>6</td><td>HSL / Colour Grading</td><td>Adjust individual colours only after global colour (WB) is correct.</td></tr>
+          <tr><td>7</td><td>Detail panel (Noise Reduction, then Sharpening)</td><td>Fix noise before adding sharpening, otherwise you sharpen the noise.</td></tr>
+          <tr><td>8</td><td>Masking / Local Adjustments</td><td>Fine-tune specific areas after the global edit is finished.</td></tr>
+          <tr><td>9</td><td>Lens Corrections + Transform</td><td>Can be done early but usually last since they're often set as defaults.</td></tr>
+          <tr><td>10</td><td>Crop</td><td>Crop last so all adjustments were applied to the full image.</td></tr>
+        </tbody>
+      </table>
+
+    </section>
+
+  </main>
+</div>
+
+<script>
+// Highlight active nav link on scroll
+const sections = document.querySelectorAll('section.section');
+const navLinks = document.querySelectorAll('.nav-link');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(link => link.classList.remove('active'));
+      const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
