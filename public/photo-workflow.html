@@ -32,27 +32,85 @@
     transition: color 0.15s;
   }
   .back-link:hover { color: #c8a96e; }
-
   .header-divider { color: #333; }
   header h1 { font-size: 17px; font-weight: 600; color: #f0f0f0; }
 
   main {
     flex: 1;
-    max-width: 640px;
+    max-width: 680px;
     margin: 0 auto;
-    padding: 4rem 2rem;
+    padding: 3rem 2rem;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    text-align: center;
   }
 
-  .coming-soon-icon { font-size: 3rem; opacity: 0.4; }
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 20px;
+  }
 
-  main h2 { font-size: 22px; font-weight: 600; color: #f0f0f0; }
-  main p { font-size: 14px; color: #555; line-height: 1.7; max-width: 400px; }
+  .rating-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .rating-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    align-items: start;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .rating-row:last-child { border-bottom: none; }
+
+  .rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-top: 2px;
+  }
+
+  .stars { font-size: 15px; letter-spacing: 1px; }
+
+  .rating-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: #444;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rating-content {}
+
+  .rating-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f0f0f0;
+    margin-bottom: 4px;
+  }
+
+  .rating-desc {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  /* per-star color tints */
+  .r1 .stars { color: #7a3030; }
+  .r2 .stars { color: #7a6030; }
+  .r3 .stars { color: #5a7a30; }
+  .r4 .stars { color: #3a7a5a; }
+  .r5 .stars { color: #c8a96e; }
+
+  .r1 .rating-label { color: #c05050; }
+  .r2 .rating-label { color: #b08840; }
+  .r3 .rating-label { color: #80aa50; }
+  .r4 .rating-label { color: #50aa80; }
+  .r5 .rating-label { color: #c8a96e; }
 </style>
 </head>
 <body>
@@ -64,9 +122,68 @@
 </header>
 
 <main>
-  <div class="coming-soon-icon">⚡</div>
-  <h2>Coming soon</h2>
-  <p>This will be a step-by-step interactive guide through your personal photography workflow — from importing off the card through culling, editing, and exporting.</p>
+
+  <p class="section-title">Star Rating System</p>
+
+  <div class="rating-list">
+
+    <div class="rating-row r1">
+      <div class="rating-stars">
+        <span class="stars">★</span>
+        <span class="rating-num">1 ★</span>
+      </div>
+      <div class="rating-content">
+        <div class="rating-label">Reject</div>
+        <div class="rating-desc">Bad exposure, out of focus, eyes closed, duplicate you'll never use. Delete candidate.</div>
+      </div>
+    </div>
+
+    <div class="rating-row r2">
+      <div class="rating-stars">
+        <span class="stars">★★</span>
+        <span class="rating-num">2 ★</span>
+      </div>
+      <div class="rating-content">
+        <div class="rating-label">Weak Keep</div>
+        <div class="rating-desc">Technically okay but nothing special. Backup if you need filler.</div>
+      </div>
+    </div>
+
+    <div class="rating-row r3">
+      <div class="rating-stars">
+        <span class="stars">★★★</span>
+        <span class="rating-num">3 ★</span>
+      </div>
+      <div class="rating-content">
+        <div class="rating-label">Solid</div>
+        <div class="rating-desc">Good shot, worth editing if needed, portfolio-adjacent.</div>
+      </div>
+    </div>
+
+    <div class="rating-row r4">
+      <div class="rating-stars">
+        <span class="stars">★★★★</span>
+        <span class="rating-num">4 ★</span>
+      </div>
+      <div class="rating-content">
+        <div class="rating-label">Strong</div>
+        <div class="rating-desc">Definitely gets edited, could be published or sold.</div>
+      </div>
+    </div>
+
+    <div class="rating-row r5">
+      <div class="rating-stars">
+        <span class="stars">★★★★★</span>
+        <span class="rating-num">5 ★</span>
+      </div>
+      <div class="rating-content">
+        <div class="rating-label">Best of the Best</div>
+        <div class="rating-desc">Your portfolio, print, or hero shots.</div>
+      </div>
+    </div>
+
+  </div>
+
 </main>
 
 </body>
