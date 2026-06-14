@@ -111,6 +111,9 @@
   .r3 .rating-label { color: #80aa50; }
   .r4 .rating-label { color: #50aa80; }
   .r5 .rating-label { color: #c8a96e; }
+
+  .rflag .stars { color: #6e9ec8; font-size: 17px; }
+  .rflag .rating-label { color: #6e9ec8; }
 </style>
 </head>
 <body>
@@ -133,8 +136,8 @@
         <span class="rating-num">1 ★</span>
       </div>
       <div class="rating-content">
-        <div class="rating-label">Reject</div>
-        <div class="rating-desc">Bad exposure, out of focus, eyes closed, duplicate you'll never use. Delete candidate.</div>
+        <div class="rating-label">Trash</div>
+        <div class="rating-desc">Blurry, bad composition, bad light, or duplicate. Assigned on first pass — delete and move on.</div>
       </div>
     </div>
 
@@ -144,8 +147,8 @@
         <span class="rating-num">2 ★</span>
       </div>
       <div class="rating-content">
-        <div class="rating-label">Weak Keep</div>
-        <div class="rating-desc">Technically okay but nothing special. Backup if you need filler.</div>
+        <div class="rating-label">Downgraded</div>
+        <div class="rating-desc">Reviewed on second pass and didn't make the cut. Was a 3, not feeling it.</div>
       </div>
     </div>
 
@@ -155,8 +158,8 @@
         <span class="rating-num">3 ★</span>
       </div>
       <div class="rating-content">
-        <div class="rating-label">Solid</div>
-        <div class="rating-desc">Good shot, worth editing if needed, portfolio-adjacent.</div>
+        <div class="rating-label">Inbox</div>
+        <div class="rating-desc">Worth a second look. Assigned on first pass — these are your edit queue going into pass 2.</div>
       </div>
     </div>
 
@@ -166,8 +169,8 @@
         <span class="rating-num">4 ★</span>
       </div>
       <div class="rating-content">
-        <div class="rating-label">Strong</div>
-        <div class="rating-desc">Definitely gets edited, could be published or sold.</div>
+        <div class="rating-label">Edit This</div>
+        <div class="rating-desc">Promoted from 3 on second pass. Love it — needs editing.</div>
       </div>
     </div>
 
@@ -177,8 +180,19 @@
         <span class="rating-num">5 ★</span>
       </div>
       <div class="rating-content">
-        <div class="rating-label">Best of the Best</div>
-        <div class="rating-desc">Your portfolio, print, or hero shots.</div>
+        <div class="rating-label">Done</div>
+        <div class="rating-desc">Editing complete, ready to export.</div>
+      </div>
+    </div>
+
+    <div class="rating-row rflag">
+      <div class="rating-stars">
+        <span class="stars flag-icon">⚑</span>
+        <span class="rating-num">Flag</span>
+      </div>
+      <div class="rating-content">
+        <div class="rating-label">Exported</div>
+        <div class="rating-desc">Delivered or exported. Done and out the door.</div>
       </div>
     </div>
 
