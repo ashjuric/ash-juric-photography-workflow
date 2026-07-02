@@ -149,10 +149,10 @@
 
   .node-reject   { background: rgba(255, 96, 96, 0.14);  border-color: rgba(255, 96, 96, 0.45);  color: #ff8f8f; }
   .node-1        { background: rgba(216, 165, 74, 0.12); border-color: rgba(216, 165, 74, 0.4);  color: #e0b25c; }
-  .node-2        { background: rgba(140, 199, 79, 0.12); border-color: rgba(140, 199, 79, 0.4);  color: #a4d874; }
-  .node-3        { background: rgba(80, 218, 165, 0.12); border-color: rgba(80, 218, 165, 0.4);  color: #6cebba; }
-  .node-4        { background: rgba(216, 188, 132, 0.14); border-color: rgba(216, 188, 132, 0.45); color: var(--accent); }
-  .node-5        { background: rgba(122, 184, 240, 0.14); border-color: rgba(122, 184, 240, 0.45); color: #96cbf7; }
+  .node-2        { background: rgba(240, 208, 72, 0.14); border-color: rgba(240, 208, 72, 0.45); color: #f0d048; }
+  .node-3        { background: rgba(95, 208, 106, 0.14); border-color: rgba(95, 208, 106, 0.45); color: #5fd06a; }
+  .node-4        { background: rgba(90, 168, 240, 0.14);  border-color: rgba(90, 168, 240, 0.45);  color: #5aa8f0; }
+  .node-5        { background: rgba(167, 139, 250, 0.16); border-color: rgba(167, 139, 250, 0.5);  color: #b89bfa; }
 
   /* 3★ branches into 4★/5★ as alternative outcomes after editing */
   .lane-3 {
@@ -243,17 +243,17 @@
   .r1 .stars { color: #e0b25c; }
   .r1 .rating-label { color: #e0b25c; }
 
-  .r2 .stars { color: #a4d874; }
-  .r2 .rating-label { color: #a4d874; }
+  .r2 .stars { color: #f0d048; }
+  .r2 .rating-label { color: #f0d048; }
 
-  .r3 .stars { color: #6cebba; }
-  .r3 .rating-label { color: #6cebba; }
+  .r3 .stars { color: #5fd06a; }
+  .r3 .rating-label { color: #5fd06a; }
 
-  .r4 .stars { color: var(--accent); }
-  .r4 .rating-label { color: var(--accent); }
+  .r4 .stars { color: #5aa8f0; }
+  .r4 .rating-label { color: #5aa8f0; }
 
-  .r5 .stars { color: #96cbf7; }
-  .r5 .rating-label { color: #96cbf7; }
+  .r5 .stars { color: #b89bfa; }
+  .r5 .rating-label { color: #b89bfa; }
 
   /* Color reference rows */
   .color-row {
@@ -343,12 +343,12 @@
 
         <svg class="branch-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
           <defs>
-            <marker id="branchArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <marker id="branchArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
               <path d="M0,0 L10,5 L0,10 Z" fill="#e8e8e8"/>
             </marker>
           </defs>
-          <path d="M0,50 H35 V25 H96" fill="none" stroke="#e8e8e8" stroke-width="3" vector-effect="non-scaling-stroke" marker-end="url(#branchArrow)"/>
-          <path d="M0,50 H35 V75 H96" fill="none" stroke="#e8e8e8" stroke-width="3" vector-effect="non-scaling-stroke" marker-end="url(#branchArrow)"/>
+          <path d="M0,50 H35 V25 H96" fill="none" stroke="#e8e8e8" stroke-width="1.5" vector-effect="non-scaling-stroke" marker-end="url(#branchArrow)"/>
+          <path d="M0,50 H35 V75 H96" fill="none" stroke="#e8e8e8" stroke-width="1.5" vector-effect="non-scaling-stroke" marker-end="url(#branchArrow)"/>
         </svg>
 
         <div class="branch-targets">
