@@ -5,18 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Photo Workflow — Ash Juric Photography</title>
 <style>
+  :root {
+    --bg: #151515;
+    --surface: #1e1e1e;
+    --surface2: #262626;
+    --border: #363636;
+    --text: #e8e8e8;
+    --text-dim: #999;
+    --heading: #f5f5f5;
+    --accent: #d8bc84;
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #111;
-    color: #d8d8d8;
+    background: var(--bg);
+    color: var(--text);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
   header {
-    background: #181818;
-    border-bottom: 1px solid #272727;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     padding: 14px 24px;
     display: flex;
     align-items: center;
@@ -29,183 +40,257 @@
     border-radius: 6px;
     font-size: 13px;
     font-weight: 500;
-    color: #888;
+    color: var(--text-dim);
     text-decoration: none;
     white-space: nowrap;
     transition: background 0.15s, color 0.15s;
   }
-  .site-tab:hover { color: #ddd; background: rgba(255,255,255,0.06); }
-  .site-tab.active { color: #111; background: #c8a96e; font-weight: 600; }
+  .site-tab:hover { color: var(--text); background: rgba(255,255,255,0.08); }
+  .site-tab.active { color: #151515; background: var(--accent); font-weight: 700; }
 
   main {
     flex: 1;
-    max-width: 1100px;
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 3rem 2rem;
+    padding: 3rem 2rem 4rem;
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: start;
-  }
-
-  @media (max-width: 700px) {
-    main { grid-template-columns: 1fr; gap: 48px; }
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
   }
 
   .section-title {
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #555;
-    margin-bottom: 20px;
+    color: var(--accent);
+    margin-bottom: 22px;
   }
 
-  /* ── Rating list ── */
-  .rating-list { display: flex; flex-direction: column; }
-
-  .rating-row {
+  /* ── Flow diagram ── */
+  .flow {
     display: grid;
-    grid-template-columns: 110px 1fr;
-    align-items: start;
-    gap: 16px;
-    padding: 14px 0;
-    border-bottom: 1px solid #1e1e1e;
+    grid-template-columns: auto 1fr;
+    column-gap: 28px;
+    row-gap: 14px;
   }
-  .rating-row:last-child { border-bottom: none; }
 
-  .rating-stars {
+  .node-start {
+    grid-column: 1;
+    grid-row: 1 / 5;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
     display: flex;
-    align-items: center;
-    gap: 6px;
-    padding-top: 2px;
-  }
-
-  .stars { font-size: 14px; letter-spacing: 1px; }
-  .rating-num { font-size: 11px; font-weight: 600; color: #444; }
-  .rating-label { font-size: 14px; font-weight: 600; color: #f0f0f0; margin-bottom: 3px; }
-  .rating-desc { font-size: 12px; color: #555; line-height: 1.6; }
-
-  .rflag .stars { color: #c05050; font-size: 16px; }
-  .rflag .rating-label { color: #c05050; }
-
-  .r1 .stars { color: #7a6030; }
-  .r1 .rating-label { color: #b08840; }
-
-  .r2 .stars { color: #5a7a30; }
-  .r2 .rating-label { color: #80aa50; }
-
-  .r3 .stars { color: #3a7a5a; }
-  .r3 .rating-label { color: #50aa80; }
-
-  .r4 .stars { color: #c8a96e; }
-  .r4 .rating-label { color: #c8a96e; }
-
-  .r5 .stars { color: #6e9ec8; }
-  .r5 .rating-label { color: #6e9ec8; }
-
-  /* ── Diagram ── */
-  .diagram { display: flex; flex-direction: column; }
-
-  .pass-block {
-    background: #181818;
-    border: 1px solid #272727;
-    border-radius: 8px;
-    padding: 16px;
-  }
-
-  .pass-import {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: #181818;
-    border: 1px solid #272727;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #888;
-  }
-
-  .connector {
-    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    color: #444;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    gap: 6px;
-    padding: 7px 0;
-  }
-  .connector::before, .connector::after {
-    content: '';
-    display: block;
-    width: 20px;
-    height: 1px;
-    background: #2a2a2a;
-  }
-
-  .pass-header {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #444;
     text-align: center;
-    margin-bottom: 12px;
+    white-space: nowrap;
   }
 
-  .branch-row {
-    display: flex;
-    gap: 8px;
+  .node-start-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--heading);
+  }
+
+  .node-start-sub {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+    margin-top: 5px;
+  }
+
+  .arrow-entry {
+    width: 30px;
+    display: inline-flex;
     justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .lane {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .arrow {
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 700;
+    flex-shrink: 0;
   }
 
   .node {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 4px;
-    padding: 10px 12px;
-    border-radius: 6px;
-    flex: 1;
-    text-align: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
   }
 
-  .node-stars { font-size: 12px; letter-spacing: 1px; }
-  .node-num { font-size: 10px; font-weight: 700; color: #444; }
-  .node-label { font-size: 11px; font-weight: 600; }
+  .node-icon { font-size: 14px; }
 
-  .node-flag { background: #1e1414; border: 1px solid #3a2020; }
-  .node-flag .node-stars { color: #c05050; font-size: 14px; }
-  .node-flag .node-label { color: #c05050; }
+  .node-reject, .node-1, .node-2, .node-3, .node-4, .node-5 {
+    width: 230px;
+    height: 44px;
+    justify-content: center;
+    flex-shrink: 0;
+  }
 
-  .node-noflag { background: #181818; border: 1px solid #2a2a2a; }
-  .node-noflag .node-stars { color: #555; font-size: 14px; }
-  .node-noflag .node-label { color: #666; }
+  .node-reject   { background: rgba(255, 96, 96, 0.14);  border-color: rgba(255, 96, 96, 0.45);  color: #ff8f8f; }
+  .node-1        { background: rgba(216, 165, 74, 0.12); border-color: rgba(216, 165, 74, 0.4);  color: #e0b25c; }
+  .node-2        { background: rgba(140, 199, 79, 0.12); border-color: rgba(140, 199, 79, 0.4);  color: #a4d874; }
+  .node-3        { background: rgba(80, 218, 165, 0.12); border-color: rgba(80, 218, 165, 0.4);  color: #6cebba; }
+  .node-4        { background: rgba(216, 188, 132, 0.14); border-color: rgba(216, 188, 132, 0.45); color: var(--accent); }
+  .node-5        { background: rgba(122, 184, 240, 0.14); border-color: rgba(122, 184, 240, 0.45); color: #96cbf7; }
 
-  .node-1 { background: #1c1a12; border: 1px solid #3a3020; }
-  .node-1 .node-stars { color: #7a6030; }
-  .node-1 .node-label { color: #b08840; }
+  /* 3★ branches into 4★/5★ as alternative outcomes after editing */
+  .lane-3 {
+    align-items: center;
+  }
 
-  .node-2 { background: #141c12; border: 1px solid #2a3a20; }
-  .node-2 .node-stars { color: #5a7a30; }
-  .node-2 .node-label { color: #80aa50; }
+  .branch-svg {
+    width: 50px;
+    align-self: stretch;
+    flex-shrink: 0;
+    overflow: visible;
+  }
 
-  .node-3 { background: #121c18; border: 1px solid #203a30; }
-  .node-3 .node-stars { color: #3a7a5a; }
-  .node-3 .node-label { color: #50aa80; }
+  .branch-targets {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
 
-  .node-4 { background: #1c1a12; border: 1px solid #3a3010; }
-  .node-4 .node-stars { color: #c8a96e; }
-  .node-4 .node-label { color: #c8a96e; }
+  /* ── Flag icons (match Lightroom's flag glyph) ── */
+  .flag-icon { width: 16px; height: 16px; flex-shrink: 0; overflow: visible; }
+  .flag-none   { color: #9a9a9a; }
+  .flag-pick   { color: var(--accent); }
+  .flag-reject { color: #ff8f8f; }
 
-  .node-5 { background: #121820; border: 1px solid #203040; }
-  .node-5 .node-stars { color: #6e9ec8; font-size: 14px; }
-  .node-5 .node-label { color: #6e9ec8; }
+  /* ── Reference boxes ── */
+  .ref-row {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .ref-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .ref-box {
+    flex: 1;
+    min-width: 300px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 26px;
+  }
+
+  .ref-box h3 {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  /* Rating reference rows */
+  .rating-list { display: flex; flex-direction: column; }
+
+  .rating-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: start;
+    gap: 14px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .rating-row:last-child { border-bottom: none; }
+
+  .rating-stars { display: flex; align-items: center; gap: 6px; padding-top: 2px; }
+
+  .stars { font-size: 14px; letter-spacing: 1px; }
+  .rating-num { font-size: 11px; font-weight: 700; color: var(--text-dim); }
+  .rating-label { font-size: 14px; font-weight: 700; color: var(--heading); margin-bottom: 3px; }
+  .rating-desc { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+  .rreject .stars { color: #ff8f8f; font-size: 16px; }
+  .rreject .rating-label { color: #ff8f8f; }
+
+  .rnoflag .stars { color: #aaa; font-size: 16px; }
+  .rnoflag .rating-label { color: #ccc; }
+
+  .rpick .stars { color: var(--accent); font-size: 16px; }
+  .rpick .rating-label { color: var(--accent); }
+
+  .r1 .stars { color: #e0b25c; }
+  .r1 .rating-label { color: #e0b25c; }
+
+  .r2 .stars { color: #a4d874; }
+  .r2 .rating-label { color: #a4d874; }
+
+  .r3 .stars { color: #6cebba; }
+  .r3 .rating-label { color: #6cebba; }
+
+  .r4 .stars { color: var(--accent); }
+  .r4 .rating-label { color: var(--accent); }
+
+  .r5 .stars { color: #96cbf7; }
+  .r5 .rating-label { color: #96cbf7; }
+
+  /* Color reference rows */
+  .color-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    align-items: start;
+    gap: 14px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .color-row:last-child { border-bottom: none; }
+
+  .color-swatch {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    margin-top: 2px;
+  }
+  .swatch-green  { background: #5fd06a; }
+  .swatch-yellow { background: #f0d048; }
+  .swatch-blue   { background: #5aa8f0; }
+
+  .color-label { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+  .color-desc { font-size: 12px; color: var(--text-dim); line-height: 1.6; }
+
+  .cgreen .color-label  { color: #5fd06a; }
+  .cyellow .color-label { color: #f0d048; }
+  .cblue .color-label   { color: #5aa8f0; }
+
+  @media (max-width: 700px) {
+    .ref-row { flex-direction: column; }
+    .flow { display: flex; flex-direction: column; align-items: flex-start; }
+    .node-start { align-items: center; }
+    .lane-3 { flex-direction: column; align-items: flex-start; }
+    .branch-svg { display: none; }
+    .branch-targets { margin-left: 40px; }
+  }
 </style>
 </head>
 <body>
@@ -220,160 +305,212 @@
 
 <main>
 
-  <!-- Left: rating reference -->
-  <div>
-    <p class="section-title">Rating Reference</p>
-    <div class="rating-list">
-
-      <div class="rating-row rflag">
-        <div class="rating-stars">
-          <span class="stars">⚑</span>
-          <span class="rating-num">Flag</span>
-        </div>
-        <div class="rating-content">
-          <div class="rating-label">Reject</div>
-          <div class="rating-desc">Obvious trash — blurry, bad exposure, eyes closed, duplicate. Flagged and done on pass 1.</div>
-        </div>
-      </div>
-
-      <div class="rating-row r1">
-        <div class="rating-stars">
-          <span class="stars">★</span>
-          <span class="rating-num">1 ★</span>
-        </div>
-        <div class="rating-content">
-          <div class="rating-label">Ehh</div>
-          <div class="rating-desc">Not trash but not using it. Reviewed on pass 2.</div>
-        </div>
-      </div>
-
-      <div class="rating-row r2">
-        <div class="rating-stars">
-          <span class="stars">★★</span>
-          <span class="rating-num">2 ★</span>
-        </div>
-        <div class="rating-content">
-          <div class="rating-label">Worth a Look</div>
-          <div class="rating-desc">Good — goes into pass 3. Your edit candidates.</div>
-        </div>
-      </div>
-
-      <div class="rating-row r3">
-        <div class="rating-stars">
-          <span class="stars">★★★</span>
-          <span class="rating-num">3 ★</span>
-        </div>
-        <div class="rating-content">
-          <div class="rating-label">Worth Editing</div>
-          <div class="rating-desc">Promoted from 2 on pass 3 — needs editing.</div>
-        </div>
-      </div>
-
-      <div class="rating-row r4">
-        <div class="rating-stars">
-          <span class="stars">★★★★</span>
-          <span class="rating-num">4 ★</span>
-        </div>
-        <div class="rating-content">
-          <div class="rating-label">Edited &amp; Ready</div>
-          <div class="rating-desc">Editing complete, ready to export.</div>
-        </div>
-      </div>
-
-      <div class="rating-row r5">
-        <div class="rating-stars">
-          <span class="stars">★★★★★</span>
-          <span class="rating-num">5 ★</span>
-        </div>
-        <div class="rating-content">
-          <div class="rating-label">Exported</div>
-          <div class="rating-desc">Delivered. Done and out the door.</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- Right: workflow diagram -->
-  <div class="diagram">
+  <!-- Workflow flow -->
+  <section>
     <p class="section-title">Workflow</p>
 
-    <div class="pass-import">📷 Import all photos</div>
+    <div class="flow">
+      <div class="node-start">
+        <div class="node-start-title">📷 Initial Review</div>
+        <div class="node-start-sub">sorts into Reject, 1★, 2★, or 3★</div>
+      </div>
 
-    <div class="connector">Pass 1</div>
-
-    <div class="pass-block">
-      <div class="pass-header">Flag the obvious rejects</div>
-      <div class="branch-row">
-        <div class="node node-flag">
-          <span class="node-stars">⚑</span>
-          <span class="node-label">Flagged — Reject</span>
+      <div class="lane">
+        <span class="arrow arrow-entry">→</span>
+        <div class="node node-reject">
+          <svg class="flag-icon" viewBox="0 0 20 20">
+            <line x1="5" y1="2.5" x2="5" y2="17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M5 3 H15 L12 7 L15 11 H5 Z" fill="currentColor"/>
+            <path d="M7.5 5 L12.5 9 M12.5 5 L7.5 9" stroke="#151515" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+          Reject Flag
         </div>
-        <div class="node node-noflag">
-          <span class="node-stars">—</span>
-          <span class="node-label">No flag — Review</span>
+      </div>
+
+      <div class="lane">
+        <span class="arrow arrow-entry">→</span>
+        <div class="node node-1"><span class="node-icon">★</span> Meh</div>
+      </div>
+
+      <div class="lane">
+        <span class="arrow arrow-entry">→</span>
+        <div class="node node-2"><span class="node-icon">★★</span> Good Options</div>
+      </div>
+
+      <div class="lane lane-3">
+        <span class="arrow arrow-entry">→</span>
+        <div class="node node-3"><span class="node-icon">★★★</span> Worth Editing</div>
+
+        <svg class="branch-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <marker id="branchArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 Z" fill="#e8e8e8"/>
+            </marker>
+          </defs>
+          <path d="M0,50 H35 V25 H96" fill="none" stroke="#e8e8e8" stroke-width="3" vector-effect="non-scaling-stroke" marker-end="url(#branchArrow)"/>
+          <path d="M0,50 H35 V75 H96" fill="none" stroke="#e8e8e8" stroke-width="3" vector-effect="non-scaling-stroke" marker-end="url(#branchArrow)"/>
+        </svg>
+
+        <div class="branch-targets">
+          <div class="node node-4"><span class="node-icon">★★★★</span> Edited — Looking Its Best</div>
+          <div class="node node-5"><span class="node-icon">★★★★★</span> All-Time Favorite</div>
         </div>
       </div>
     </div>
+  </section>
 
-    <div class="connector">Pass 2 — unflagged only</div>
+  <!-- Reference boxes -->
+  <section>
+    <p class="section-title">Reference</p>
 
-    <div class="pass-block">
-      <div class="pass-header">Rate each unflagged shot</div>
-      <div class="branch-row">
-        <div class="node node-1">
-          <span class="node-stars">★</span>
-          <span class="node-num">1 ★</span>
-          <span class="node-label">Ehh</span>
-        </div>
-        <div class="node node-2">
-          <span class="node-stars">★★</span>
-          <span class="node-num">2 ★</span>
-          <span class="node-label">Worth a Look</span>
+    <div class="ref-row">
+
+      <div class="ref-box">
+        <h3>Rating Reference</h3>
+        <div class="rating-list">
+
+          <div class="rating-row r1">
+            <div class="rating-stars">
+              <span class="stars">★</span>
+              <span class="rating-num">1 ★</span>
+            </div>
+            <div class="rating-content">
+              <div class="rating-label">Meh</div>
+              <div class="rating-desc">Not trash, but not needed.</div>
+            </div>
+          </div>
+
+          <div class="rating-row r2">
+            <div class="rating-stars">
+              <span class="stars">★★</span>
+              <span class="rating-num">2 ★</span>
+            </div>
+            <div class="rating-content">
+              <div class="rating-label">Good Options</div>
+              <div class="rating-desc">This is where you could pull to edit from — good options if you need more. Maybe look back to these later.</div>
+            </div>
+          </div>
+
+          <div class="rating-row r3">
+            <div class="rating-stars">
+              <span class="stars">★★★</span>
+              <span class="rating-num">3 ★</span>
+            </div>
+            <div class="rating-content">
+              <div class="rating-label">Worth Editing</div>
+              <div class="rating-desc">Needs to edit — these are definitely worth editing. Your primary pull-to-edit pool.</div>
+            </div>
+          </div>
+
+          <div class="rating-row r4">
+            <div class="rating-stars">
+              <span class="stars">★★★★</span>
+              <span class="rating-num">4 ★</span>
+            </div>
+            <div class="rating-content">
+              <div class="rating-label">Edited — Looking Its Best</div>
+              <div class="rating-desc">Edited and done — pretty much looking its best.</div>
+            </div>
+          </div>
+
+          <div class="rating-row r5">
+            <div class="rating-stars">
+              <span class="stars">★★★★★</span>
+              <span class="rating-num">5 ★</span>
+            </div>
+            <div class="rating-content">
+              <div class="rating-label">All-Time Favorite</div>
+              <div class="rating-desc">Your all-time favorite. The best of the best.</div>
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
 
-    <div class="connector">Pass 3 — 2★ only</div>
+      <div class="ref-col">
 
-    <div class="pass-block">
-      <div class="pass-header">Pick what to edit</div>
-      <div class="branch-row">
-        <div class="node node-3">
-          <span class="node-stars">★★★</span>
-          <span class="node-num">3 ★</span>
-          <span class="node-label">Worth Editing</span>
+        <div class="ref-box">
+          <h3>Flag Reference</h3>
+          <div class="rating-list">
+
+            <div class="rating-row rreject">
+              <div class="rating-stars">
+                <svg class="flag-icon flag-reject" viewBox="0 0 20 20">
+                  <line x1="5" y1="2.5" x2="5" y2="17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                  <path d="M5 3 H15 L12 7 L15 11 H5 Z" fill="currentColor"/>
+                  <path d="M7.5 5 L12.5 9 M12.5 5 L7.5 9" stroke="#151515" stroke-width="1.3" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="rating-content">
+                <div class="rating-label">Reject Flag</div>
+                <div class="rating-desc">Terrible composition, eyes closed, or just bad.</div>
+              </div>
+            </div>
+
+            <div class="rating-row rpick">
+              <div class="rating-stars">
+                <svg class="flag-icon flag-pick" viewBox="0 0 20 20">
+                  <line x1="5" y1="2.5" x2="5" y2="17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                  <path d="M5 3 H15 L12 7 L15 11 H5 Z" fill="currentColor"/>
+                </svg>
+              </div>
+              <div class="rating-content">
+                <div class="rating-label">Pick Flag</div>
+                <div class="rating-desc">Your favorites — totally complete and just loved (applied to 4–5★).</div>
+              </div>
+            </div>
+
+            <div class="rating-row rnoflag">
+              <div class="rating-stars">
+                <svg class="flag-icon flag-none" viewBox="0 0 20 20">
+                  <line x1="5" y1="2.5" x2="5" y2="17" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                  <path d="M5 3 H15 L12 7 L15 11 H5 Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="rating-content">
+                <div class="rating-label">No Flag</div>
+                <div class="rating-desc">Working photos.</div>
+              </div>
+            </div>
+
+          </div>
         </div>
-      </div>
-    </div>
 
-    <div class="connector">Edit</div>
+        <div class="ref-box">
+          <h3>Color Reference</h3>
+          <div class="rating-list">
 
-    <div class="pass-block">
-      <div class="pass-header">After editing</div>
-      <div class="branch-row">
-        <div class="node node-4">
-          <span class="node-stars">★★★★</span>
-          <span class="node-num">4 ★</span>
-          <span class="node-label">Edited &amp; Ready</span>
+            <div class="color-row cgreen">
+              <div class="color-swatch swatch-green"></div>
+              <div class="color-content">
+                <div class="color-label">Green</div>
+                <div class="color-desc">Fully edited — don't touch.</div>
+              </div>
+            </div>
+
+            <div class="color-row cyellow">
+              <div class="color-swatch swatch-yellow"></div>
+              <div class="color-content">
+                <div class="color-label">Yellow</div>
+                <div class="color-desc">Editing — might want to think through the edit.</div>
+              </div>
+            </div>
+
+            <div class="color-row cblue">
+              <div class="color-swatch swatch-blue"></div>
+              <div class="color-content">
+                <div class="color-label">Blue</div>
+                <div class="color-desc">Exported — final edit, living in your final folder.</div>
+              </div>
+            </div>
+
+          </div>
         </div>
+
       </div>
+
     </div>
-
-    <div class="connector">Export</div>
-
-    <div class="pass-block">
-      <div class="pass-header">Delivered</div>
-      <div class="branch-row">
-        <div class="node node-5">
-          <span class="node-stars">★★★★★</span>
-          <span class="node-num">5 ★</span>
-          <span class="node-label">Exported</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
+  </section>
 
 </main>
 
