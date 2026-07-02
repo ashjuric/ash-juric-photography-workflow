@@ -27,20 +27,21 @@
     flex-shrink: 0;
   }
 
-  header h1 { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.3px; }
   header .subtitle { font-size: 12px; color: #555; flex: 1; }
 
-  .back-link {
-    font-size: 12px;
-    color: #555;
+  .site-tabs { display: flex; gap: 4px; }
+  .site-tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    transition: color 0.15s;
     white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
   }
-  .back-link:hover { color: #c8a96e; }
+  .site-tab:hover { color: #ddd; background: rgba(255,255,255,0.06); }
+  .site-tab.active { color: #111; background: #c8a96e; font-weight: 600; }
 
   .history-btn {
     display: flex;
@@ -293,8 +294,11 @@
 <body>
 
 <header>
-  <a class="back-link" href="index.html">← Tools</a>
-  <h1>Photo Edit Advisor</h1>
+  <nav class="site-tabs">
+    <a class="site-tab" href="index.html">Workflow</a>
+    <a class="site-tab active" href="photo-editing.html">Edit Advisor</a>
+    <a class="site-tab" href="lightroom-cheatsheet.html">Cheat Sheet</a>
+  </nav>
   <span class="subtitle">Drop a photo to get AI editing recommendations</span>
   <button class="history-btn" id="historyBtn">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

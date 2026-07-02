@@ -3,145 +3,379 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ash Juric — Photography Tools</title>
+<title>Photo Workflow — Ash Juric Photography</title>
 <style>
-  :root {
-    --bg: #111;
-    --surface: #181818;
-    --surface2: #1f1f1f;
-    --border: #272727;
-    --accent: #c8a96e;
-    --text: #d8d8d8;
-    --text-dim: #666;
-    --heading: #f0f0f0;
-  }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    background: #111;
+    color: #d8d8d8;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
   }
-
   header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 1.5rem 2rem;
+    background: #181818;
+    border-bottom: 1px solid #272727;
+    padding: 14px 24px;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 16px;
   }
 
-  .logo {
-    width: 40px; height: 40px;
-    background: var(--accent);
-    border-radius: 9px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem;
-    flex-shrink: 0;
+  .site-tabs { display: flex; gap: 4px; }
+  .site-tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
   }
-
-  .site-name { font-size: 1.3rem; font-weight: 700; color: var(--heading); letter-spacing: -0.01em; }
-  .site-tagline { font-size: 0.78rem; color: var(--text-dim); margin-top: 0.1rem; }
+  .site-tab:hover { color: #ddd; background: rgba(255,255,255,0.06); }
+  .site-tab.active { color: #111; background: #c8a96e; font-weight: 600; }
 
   main {
     flex: 1;
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 3rem 2rem;
     width: 100%;
-  }
-
-  .section-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--text-dim);
-    margin-bottom: 1rem;
-  }
-
-  .tools-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
   }
 
-  .tool-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 1.5rem;
-    text-decoration: none;
-    color: inherit;
+  @media (max-width: 700px) {
+    main { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  /* ── Rating list ── */
+  .rating-list { display: flex; flex-direction: column; }
+
+  .rating-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    align-items: start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .rating-row:last-child { border-bottom: none; }
+
+  .rating-stars {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-top: 2px;
+  }
+
+  .stars { font-size: 14px; letter-spacing: 1px; }
+  .rating-num { font-size: 11px; font-weight: 600; color: #444; }
+  .rating-label { font-size: 14px; font-weight: 600; color: #f0f0f0; margin-bottom: 3px; }
+  .rating-desc { font-size: 12px; color: #555; line-height: 1.6; }
+
+  .rflag .stars { color: #c05050; font-size: 16px; }
+  .rflag .rating-label { color: #c05050; }
+
+  .r1 .stars { color: #7a6030; }
+  .r1 .rating-label { color: #b08840; }
+
+  .r2 .stars { color: #5a7a30; }
+  .r2 .rating-label { color: #80aa50; }
+
+  .r3 .stars { color: #3a7a5a; }
+  .r3 .rating-label { color: #50aa80; }
+
+  .r4 .stars { color: #c8a96e; }
+  .r4 .rating-label { color: #c8a96e; }
+
+  .r5 .stars { color: #6e9ec8; }
+  .r5 .rating-label { color: #6e9ec8; }
+
+  /* ── Diagram ── */
+  .diagram { display: flex; flex-direction: column; }
+
+  .pass-block {
+    background: #181818;
+    border: 1px solid #272727;
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .pass-import {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #181818;
+    border: 1px solid #272727;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+  }
+
+  .connector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #444;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    gap: 6px;
+    padding: 7px 0;
+  }
+  .connector::before, .connector::after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: #2a2a2a;
+  }
+
+  .pass-header {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #444;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .branch-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .node {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .tool-card:hover { border-color: var(--accent); background: var(--surface2); }
-
-  .tool-icon { font-size: 1.75rem; margin-bottom: 0.25rem; }
-  .tool-name { font-size: 1rem; font-weight: 700; color: var(--heading); }
-  .tool-desc { font-size: 0.83rem; color: var(--text-dim); line-height: 1.6; }
-  .tool-arrow { margin-top: auto; padding-top: 1rem; font-size: 0.78rem; color: var(--accent); }
-
-  footer {
+    align-items: center;
+    gap: 4px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    flex: 1;
     text-align: center;
-    padding: 1.5rem;
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    border-top: 1px solid var(--border);
   }
 
-  @media (max-width: 600px) {
-    main { padding: 2rem 1rem; }
-    .tools-grid { grid-template-columns: 1fr; }
-  }
+  .node-stars { font-size: 12px; letter-spacing: 1px; }
+  .node-num { font-size: 10px; font-weight: 700; color: #444; }
+  .node-label { font-size: 11px; font-weight: 600; }
+
+  .node-flag { background: #1e1414; border: 1px solid #3a2020; }
+  .node-flag .node-stars { color: #c05050; font-size: 14px; }
+  .node-flag .node-label { color: #c05050; }
+
+  .node-noflag { background: #181818; border: 1px solid #2a2a2a; }
+  .node-noflag .node-stars { color: #555; font-size: 14px; }
+  .node-noflag .node-label { color: #666; }
+
+  .node-1 { background: #1c1a12; border: 1px solid #3a3020; }
+  .node-1 .node-stars { color: #7a6030; }
+  .node-1 .node-label { color: #b08840; }
+
+  .node-2 { background: #141c12; border: 1px solid #2a3a20; }
+  .node-2 .node-stars { color: #5a7a30; }
+  .node-2 .node-label { color: #80aa50; }
+
+  .node-3 { background: #121c18; border: 1px solid #203a30; }
+  .node-3 .node-stars { color: #3a7a5a; }
+  .node-3 .node-label { color: #50aa80; }
+
+  .node-4 { background: #1c1a12; border: 1px solid #3a3010; }
+  .node-4 .node-stars { color: #c8a96e; }
+  .node-4 .node-label { color: #c8a96e; }
+
+  .node-5 { background: #121820; border: 1px solid #203040; }
+  .node-5 .node-stars { color: #6e9ec8; font-size: 14px; }
+  .node-5 .node-label { color: #6e9ec8; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">📷</div>
-  <div>
-    <div class="site-name">Ash Juric Photography</div>
-    <div class="site-tagline">Personal photography tools</div>
-  </div>
+  <nav class="site-tabs">
+    <a class="site-tab active" href="index.html">Workflow</a>
+    <a class="site-tab" href="photo-editing.html">Edit Advisor</a>
+    <a class="site-tab" href="lightroom-cheatsheet.html">Cheat Sheet</a>
+  </nav>
 </header>
 
 <main>
-  <p class="section-label">Tools</p>
-  <div class="tools-grid">
 
-    <a class="tool-card" href="photo-editing.html">
-      <div class="tool-icon">🎨</div>
-      <div class="tool-name">Edit Advisor</div>
-      <div class="tool-desc">Drop a photo and get AI-powered editing recommendations with prioritised areas highlighted directly on the image.</div>
-      <div class="tool-arrow">Open tool →</div>
-    </a>
+  <!-- Left: rating reference -->
+  <div>
+    <p class="section-title">Rating Reference</p>
+    <div class="rating-list">
 
-    <a class="tool-card" href="lightroom-cheatsheet.html">
-      <div class="tool-icon">📖</div>
-      <div class="tool-name">Lightroom Cheat Sheet</div>
-      <div class="tool-desc">Full reference for every panel — Texture vs Clarity, tone sliders, HSL, noise reduction, masking, sharpening, and edit order.</div>
-      <div class="tool-arrow">Open reference →</div>
-    </a>
+      <div class="rating-row rflag">
+        <div class="rating-stars">
+          <span class="stars">⚑</span>
+          <span class="rating-num">Flag</span>
+        </div>
+        <div class="rating-content">
+          <div class="rating-label">Reject</div>
+          <div class="rating-desc">Obvious trash — blurry, bad exposure, eyes closed, duplicate. Flagged and done on pass 1.</div>
+        </div>
+      </div>
 
-    <a class="tool-card" href="photo-workflow.html">
-      <div class="tool-icon">⚡</div>
-      <div class="tool-name">Photo Workflow</div>
-      <div class="tool-desc">Step-by-step guide through your personal import, cull, edit, and export process — from card to delivery.</div>
-      <div class="tool-arrow">Open tool →</div>
-    </a>
+      <div class="rating-row r1">
+        <div class="rating-stars">
+          <span class="stars">★</span>
+          <span class="rating-num">1 ★</span>
+        </div>
+        <div class="rating-content">
+          <div class="rating-label">Ehh</div>
+          <div class="rating-desc">Not trash but not using it. Reviewed on pass 2.</div>
+        </div>
+      </div>
+
+      <div class="rating-row r2">
+        <div class="rating-stars">
+          <span class="stars">★★</span>
+          <span class="rating-num">2 ★</span>
+        </div>
+        <div class="rating-content">
+          <div class="rating-label">Worth a Look</div>
+          <div class="rating-desc">Good — goes into pass 3. Your edit candidates.</div>
+        </div>
+      </div>
+
+      <div class="rating-row r3">
+        <div class="rating-stars">
+          <span class="stars">★★★</span>
+          <span class="rating-num">3 ★</span>
+        </div>
+        <div class="rating-content">
+          <div class="rating-label">Worth Editing</div>
+          <div class="rating-desc">Promoted from 2 on pass 3 — needs editing.</div>
+        </div>
+      </div>
+
+      <div class="rating-row r4">
+        <div class="rating-stars">
+          <span class="stars">★★★★</span>
+          <span class="rating-num">4 ★</span>
+        </div>
+        <div class="rating-content">
+          <div class="rating-label">Edited &amp; Ready</div>
+          <div class="rating-desc">Editing complete, ready to export.</div>
+        </div>
+      </div>
+
+      <div class="rating-row r5">
+        <div class="rating-stars">
+          <span class="stars">★★★★★</span>
+          <span class="rating-num">5 ★</span>
+        </div>
+        <div class="rating-content">
+          <div class="rating-label">Exported</div>
+          <div class="rating-desc">Delivered. Done and out the door.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right: workflow diagram -->
+  <div class="diagram">
+    <p class="section-title">Workflow</p>
+
+    <div class="pass-import">📷 Import all photos</div>
+
+    <div class="connector">Pass 1</div>
+
+    <div class="pass-block">
+      <div class="pass-header">Flag the obvious rejects</div>
+      <div class="branch-row">
+        <div class="node node-flag">
+          <span class="node-stars">⚑</span>
+          <span class="node-label">Flagged — Reject</span>
+        </div>
+        <div class="node node-noflag">
+          <span class="node-stars">—</span>
+          <span class="node-label">No flag — Review</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">Pass 2 — unflagged only</div>
+
+    <div class="pass-block">
+      <div class="pass-header">Rate each unflagged shot</div>
+      <div class="branch-row">
+        <div class="node node-1">
+          <span class="node-stars">★</span>
+          <span class="node-num">1 ★</span>
+          <span class="node-label">Ehh</span>
+        </div>
+        <div class="node node-2">
+          <span class="node-stars">★★</span>
+          <span class="node-num">2 ★</span>
+          <span class="node-label">Worth a Look</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">Pass 3 — 2★ only</div>
+
+    <div class="pass-block">
+      <div class="pass-header">Pick what to edit</div>
+      <div class="branch-row">
+        <div class="node node-3">
+          <span class="node-stars">★★★</span>
+          <span class="node-num">3 ★</span>
+          <span class="node-label">Worth Editing</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">Edit</div>
+
+    <div class="pass-block">
+      <div class="pass-header">After editing</div>
+      <div class="branch-row">
+        <div class="node node-4">
+          <span class="node-stars">★★★★</span>
+          <span class="node-num">4 ★</span>
+          <span class="node-label">Edited &amp; Ready</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">Export</div>
+
+    <div class="pass-block">
+      <div class="pass-header">Delivered</div>
+      <div class="branch-row">
+        <div class="node node-5">
+          <span class="node-stars">★★★★★</span>
+          <span class="node-num">5 ★</span>
+          <span class="node-label">Exported</span>
+        </div>
+      </div>
+    </div>
 
   </div>
-</main>
 
-<footer>Ash Juric Photography</footer>
+</main>
 
 </body>
 </html>

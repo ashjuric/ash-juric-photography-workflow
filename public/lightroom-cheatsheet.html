@@ -50,15 +50,20 @@
     z-index: 50;
     flex-shrink: 0;
   }
-  .back-link {
-    font-size: 12px; color: #555; text-decoration: none;
-    display: flex; align-items: center; gap: 4px; white-space: nowrap;
-    transition: color 0.15s;
+  .site-tabs { display: flex; gap: 4px; }
+  .site-tab {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #888;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
   }
-  .back-link:hover { color: var(--accent); }
-  .topbar-divider { color: #333; }
-  .topbar h1 { font-size: 15px; font-weight: 600; color: var(--heading); flex: 1; }
-  .topbar-subtitle { font-size: 11px; color: var(--text-dim); }
+  .site-tab:hover { color: #ddd; background: rgba(255,255,255,0.06); }
+  .site-tab.active { color: #111; background: var(--accent); font-weight: 600; }
+  .topbar-subtitle { font-size: 11px; color: var(--text-dim); flex: 1; text-align: right; }
 
   /* ── Layout ── */
   .layout {
@@ -273,9 +278,11 @@
 <body>
 
 <div class="topbar">
-  <a class="back-link" href="index.html">← Tools</a>
-  <span class="topbar-divider">/</span>
-  <h1>Lightroom Cheat Sheet</h1>
+  <nav class="site-tabs">
+    <a class="site-tab" href="index.html">Workflow</a>
+    <a class="site-tab" href="photo-editing.html">Edit Advisor</a>
+    <a class="site-tab active" href="lightroom-cheatsheet.html">Cheat Sheet</a>
+  </nav>
   <span class="topbar-subtitle">Full reference</span>
 </div>
 
